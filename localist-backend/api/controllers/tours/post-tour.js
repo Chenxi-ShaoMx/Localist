@@ -16,7 +16,7 @@ module.exports = {
 			required    : true,
 			type        : 'string',
 			description :
-				'The guide_id for the guide that created the tour.'
+				'The user_key for the user that created the tour.'
 		},
 
 		price               : {
@@ -86,6 +86,12 @@ module.exports = {
 			required    : true,
 			type        : 'json',
 			description : 'the range of number of guests allowed on tour'
+		},
+
+		availability        : {
+			required    : true,
+			type        : 'ref',
+			description : ''
 		}
 	},
 
@@ -115,6 +121,7 @@ module.exports = {
 		var database = firebase.database()
 		var toursRefLong = database.ref('tours_long')
 		var toursRefShort = database.ref('tours_short')
+		var usersRef = database.ref('users/' + inputs.user_key)
 		var coord = inputs.coordinates || ''
 
 		try {
@@ -126,36 +133,44 @@ module.exports = {
 			})
 
 			var short_tour = await toursRefShort.push({
-				title       : inputs.title,
-				user_key    : inputs.user_key,
-				price       : {
+				title        : inputs.title,
+				user_key     : inputs.user_key,
+				price        : {
 					low  : inputs.price.low,
 					high : inputs.price.high
 				},
-				duration    : {
+				duration     : {
 					short : inputs.duration.short,
 					long  : inputs.duration.long
 				},
-				main_image  : inputs.main_image || '',
-				location    : {
+				main_image   : inputs.main_image || '',
+				location     : {
 					city    : inputs.location.city,
 					country : inputs.location.country
 				},
-				coordinates : {
+				coordinates  : {
 					lattitude : coord.lattitude || '',
 					longitude : coord.longitude || ''
 				},
-				tags        : inputs.tags || '',
-				category    : inputs.category,
-				long_id     : long_tour.key,
-				is_public   : false,
-				guests      : {
+				tags         : inputs.tags || '',
+				category     : inputs.category,
+				long_id      : long_tour.key,
+				is_public    : true,
+				guests       : {
 					high : inputs.guests.high,
 					low  : inputs.guests.low
+				},
+				availability : inputs.availability,
+				rating       : {
+					count   : 0,
+					average : 0
 				}
 			})
+
+			var user = usersRef.child('tours').push({
+				tour_id : short_tour.key
+			})
 		} catch (error) {
-			console.log(error)
 			return this.res.status(400).send('Error')
 		}
 

@@ -55,7 +55,6 @@ export default {
 
 <style scoped>
 .card-img-top {
-    /* border-radius: 40%; */
     border: 1px solid black;
     width: 200px;
     margin: auto;

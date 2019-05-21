@@ -1,80 +1,184 @@
 <template>
-    <div class="container">
-        <div id="prev">
-            <input
-                type="file"
-                id="file"
-                accept="image/x-png, image/gif, image/jpeg"
-                ref="file"
-                v-on:change="onFileChange"
-            >
-            <div id="preview">
-                <img v-if="url" :src="url" height="100">
-            </div>
-        </div>
+    <v-container grid-list-xl text-xs-center mb-5>
+        <v-layout wrap pt-3 justify-center>
+            <v-flex
+                xs8
+                class="cyan--text text--darken-2 display-2 font-weight-black font-italic"
+            >Profile</v-flex>
+        </v-layout>
 
-        <!-- <div class="large-12 medium-12 small-12 cell">-->
-        <!--<label>-->
-        <!--<input type="file" id="files" accept="image/x-png, image/gif, image/jpeg" ref="files" v-on:change="handleFilesUpload()"/>-->
-        <!--</label>-->
-        <!--</div>-->
-        <!--<div class="large-12 medium-12 small-12 cell">-->
-        <!--<div v-for="(file, key) in files" class="file-listing">{{ file.name }} <span class="remove-file" v-on:click="removeFile( key )">Remove</span></div>-->
-        <!--</div>-->
-        <!--<br> -->
-        
-        <form v-on:submit.prevent="updateProfile">
-            <div>
-                <h3>Your Profile</h3>
-                <input type="text" placeholder="First Name" v-model="first_name">
-                <br>
-                <input type="text" placeholder="Last Name" v-model="last_name">
-                <br>
-                <input type="text" placeholder="Age" v-model="age">
-                <br>
-                <input type="text" placeholder="Gender" v-model="gender">
-                <br>
-                <input type="text" placeholder="City" v-model="city">
-                <br>
-                <input type="text" placeholder="Country" v-model="country">
-            </div>
-        </form>
-        <div class="large-12 medium-12 small-12 cell">
-            <button v-on:click="submitFiles()">Submit</button>
-        </div>
-    </div>
+        <v-divider></v-divider>
+
+        <v-layout row wrap>
+            <v-flex xs12>
+                <form v-on:submit.prevent="updateProfile">
+                    <v-layout row wrap justify-space-around>
+                        <v-flex xs4>
+                            <v-layout row wrap>
+                                <v-flex xs6 pr-5 class="title align-right">Profile Image</v-flex>
+
+                                <v-layout column wrap>
+                                    <v-flex xs12>
+                                        <div id="preview">
+                                            <img v-if="url" :src="url" class="preview">
+                                            <img v-else :src="imgURL" class="preview">
+                                        </div>
+                                    </v-flex>
+
+                                    <v-flex xs6>
+                                        <input
+                                            type="file"
+                                            id="file"
+                                            accept="image/x-png, image/gif, image/jpeg"
+                                            ref="file"
+                                            v-on:change="onFileChange"
+                                        >
+                                    </v-flex>
+                                </v-layout>
+                            </v-layout>
+
+                            <v-divider></v-divider>
+
+                            <v-layout row wrap>
+                                <v-flex
+                                    pr-5
+                                    align-self-center
+                                    xs6
+                                    class="title align-right"
+                                >First Name</v-flex>
+                                <v-flex pl-5 xs6>
+                                    <v-text-field single-line v-model="first_name"></v-text-field>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout row wrap>
+                                <v-flex
+                                    pr-5
+                                    align-self-center
+                                    xs6
+                                    class="title align-right"
+                                >Last Name</v-flex>
+                                <v-flex pl-5 xs6>
+                                    <v-text-field single-line v-model="last_name"></v-text-field>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout row wrap>
+                                <v-flex
+                                    pr-5
+                                    align-self-center
+                                    xs6
+                                    class="title align-right"
+                                >Date of Birth</v-flex>
+                                <v-flex pl-5 xs6>
+                                    <v-menu
+                                        v-model="date_menu"
+                                        :close-on-content-click="false"
+                                        full-width
+                                        max-width="290"
+                                    >
+                                        <template v-slot:activator="{ on }">
+                                            <v-text-field
+                                                :value="computedDateFormatted"
+                                                clearable
+                                                readonly
+                                                v-on="on"
+                                            ></v-text-field>
+                                        </template>
+                                        <v-date-picker
+                                            outline
+                                            v-model="dob"
+                                            @change="date_menu = false"
+                                        ></v-date-picker>
+                                    </v-menu>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout row wrap>
+                                <v-flex pr-5 align-self-center xs6 class="title align-right">Gender</v-flex>
+                                <v-flex pl-5 xs6>
+                                    <v-select :items="genders" v-model="gender"></v-select>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout row wrap>
+                                <v-flex pr-5 align-self-center xs6 class="title align-right">City</v-flex>
+                                <v-flex pl-5 xs6>
+                                    <v-text-field single-line v-model="city"></v-text-field>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout row wrap>
+                                <v-flex pr-5 align-self-center xs6 class="title align-right">Country</v-flex>
+                                <v-flex pl-5 xs6>
+                                    <v-text-field single-line v-model="country"></v-text-field>
+                                </v-flex>
+                            </v-layout>
+                        </v-flex>
+                    </v-layout>
+                </form>
+                <div class="large-12 medium-12 small-12 cell">
+                    <v-btn class="cyan darken-2 mt-5" dark large v-on:click="submitFiles()">Submit</v-btn>
+                </div>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
+
 <script>
+import moment from "moment";
 import router from "../router";
 export default {
-    /*
-          Defines the data used by the component
-        */
+    name: "profile",
     data: () => ({
         files: [],
         url: null,
         first_name: "",
         last_name: "",
-        age: "",
+        dob: "",
         gender: "",
         city: "",
-        country: ""
+        country: "",
+        genders: ["Male", "Female", "Other"],
+        date_menu: false,
+        imgURL: ""
     }),
-
-    /*
-          Defines the method used by the component
-        */
+    computed: {
+        computedDateFormatted() {
+            return this.dob
+                ? moment(this.dob).format("dddd, MMMM Do YYYY")
+                : "";
+        }
+    },
+    created() {
+        var instance = this;
+        this.$http
+            .get("/user/find/" + this.$store.getters.getUserKey)
+            .then(function(response) {
+                response = response.data;
+                if (response.name) {
+                    instance.first_name = response.name.first;
+                    instance.last_name = response.name.last;
+                }
+                if (response.date_of_birth) {
+                    instance.dob = response.date_of_birth;
+                }
+                if (response.gender) {
+                    instance.gender = response.gender;
+                }
+                if (response.location) {
+                    instance.country = response.location.country;
+                    instance.city = response.location.city;
+                }
+                if (response.image) {
+                    instance.imgURL = response.image;
+                }
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+    },
     methods: {
-        createGuide() {
-            formData = {
-                first_name: this.first_name,
-                last_name: this.last_name,
-                age: this.age,
-                gender: this.gender,
-                city: this.city,
-                country: this.country
-            };
-        },
         onFileChange(e) {
             this.files = [];
             this.files.push(e.target.files[0]);
@@ -82,77 +186,93 @@ export default {
             // this.files = this.$refs.files.files;
         },
         /*
-              Adds a file
-            */
+        Adds a file
+      */
         addFiles() {
             this.$refs.files.click();
         },
 
         /*
-              Submits files to the server
-            */
+        Submits files to the server
+      */
         submitFiles() {
+            var instance = this;
             /*
-                  Initialize the form data
-                */
+          Initialize the form data
+        */
+            var updateData = {};
             var fileData = new FormData();
-            var formData = new FormData();
-
             /*
-                  Iteate over any file sent over appending the files
-                  to the form data.
-                */
-            var file = [];
+          Iteate over any file sent over appending the files
+          to the form data.
+        */
             for (let i = 0; i < this.files.length; i++) {
                 fileData.append("img", this.files[i]);
             }
-            formData.append("first_name", this.first_name);
-            formData.append("last_name", this.last_name);
-            formData.append("age", this.age);
-            formData.append("gender", this.gender);
-            formData.append("city", this.city);
-            formData.append("country", this.country);
-            for (var value of formData.values()) {
-                this.console.log(value);
-            }
+            updateData = {
+                name: {
+                    first: this.first_name,
+                    last: this.last_name
+                },
+                date_of_birth: this.dob,
+                gender: this.gender,
+                location: {
+                    country: this.country,
+                    city: this.city
+                }
+            };
             /*
-                  Make the request to the POST /select-files URL
-                */
-            this.$http
-                .post(
-                    "/image/user/" + this.$store.getters.getUserKey,
-                    fileData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data"
+          Make the request to the POST /select-files URL
+        */
+            if (this.files.length > 0) {
+                this.$http
+                    .post(
+                        "/user/image/" + this.$store.getters.getUserKey,
+                        fileData,
+                        {
+                            headers: {
+                                "Content-Type": "multipart/form-data"
+                            }
                         }
-                    }
+                    )
+                    .then(function(data) {
+                        // router.push("/tours");
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+            }
+            console.log(updateData);
+            this.$http
+                .patch(
+                    "/user/update/" + this.$store.getters.getUserKey,
+                    updateData
                 )
-                .then(function(data) {
-                    // router.push("/tours");
+                .catch(function(err) {
+                    console.log(err);
                 })
-                .catch(function() {
-                    this.console.log("FAILURE!!");
+                .then(function(res) {
+                    router.go("/");
                 });
         },
 
         /*
-              Handles the uploading of files
-            */
+        Handles the uploading of files
+      */
         handleFilesUpload() {
             let uploadedFiles = this.$refs.files.files;
 
             /*
-                  Adds the uploaded file to the files array
-                */
+          Adds the uploaded file to the files array
+        */
             for (let i = 0; i < uploadedFiles.length; i++) {
                 this.files.push(uploadedFiles[i]);
             }
         },
 
         /*
-              Removes a select file the user has uploaded
-            */
+        Removes a select file the user has uploaded
+      */
         removeFile(key) {
             this.files.splice(key, 1);
         }
@@ -160,4 +280,12 @@ export default {
 };
 </script>
 <style scoped>
+.preview {
+    max-height: 100%;
+    max-width: 90%;
+}
+
+.align-right {
+    text-align: right;
+}
 </style>

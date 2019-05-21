@@ -111,7 +111,6 @@ module.exports = {
 					return snapshot.val().long_id
 				})
 				.then(function (long_key){
-					console.log(long_key)
 					toursRefLong.child(long_key).update({
 						additional_comments :
 							inputs.additional_comments ||
@@ -129,7 +128,6 @@ module.exports = {
 						tour_description    :
 							inputs.tour_description
 					})
-					console.log('update long')
 				})
 				.then(function (){
 					toursRefShort.child(short_key).update({

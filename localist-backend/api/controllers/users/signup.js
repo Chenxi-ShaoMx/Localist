@@ -61,7 +61,7 @@ the account verification message.)`,
 			user : ''
 		}
 
-		// try {
+		try {
 			await firebase
 				.auth()
 				.createUserWithEmailAndPassword(
@@ -77,9 +77,9 @@ the account verification message.)`,
 				.then(function (newUser){
 					userData.key = newUser.key
 				})
-		// } catch (error) {
-		// 	return this.res.status(409).send('Email already in use')
-		// }
+		} catch (error) {
+			return this.res.status(409).send('Email already in use')
+		}
 
 		var actionCodeSettings = {
 			// URL you want to redirect back to. The domain (www.example.com) for this

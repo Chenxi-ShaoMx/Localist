@@ -8,7 +8,6 @@
                     <div>
                         <input type="email" placeholder="Email" v-model="email">
                         <input type="password" placeholder="Password" v-model="password">
-                        <input type="password" placeholder="Confirm Password" v-model="confirm">
                         <!--   <div>
                             <input
                                 type="checkbox"
@@ -69,7 +68,7 @@ export default {
     name: "Signin",
     data: () => ({
         email: "",
-        password: ""
+        password: "",
     }),
     props: {
         msg: String
@@ -77,6 +76,7 @@ export default {
     methods: {
         signUp() {
             var r = this;
+
             const formData = {
                 email: this.email,
                 password: this.password
@@ -89,12 +89,11 @@ export default {
                     } else {
                         r.$store.commit("setCurrentUser", response.data.user);
                         r.$store.commit("setUserKey", response.data.key);
-
                         router.push("/profile");
                     }
                 })
                 .catch(function(error) {
-                    this.console.log(error);
+                    alert(error);
                 });
         },
         signIn() {
@@ -109,10 +108,6 @@ export default {
                     if (response.data.error) {
                         alert(response.data.error.message);
                     } else {
-                        r.$store.commit(
-                            "setUsername",
-                            response.data.user.user.email
-                        );
                         r.$store.commit("setCurrentUser", response.data.user);
                         r.$store.commit("setCurrentToken", response.data.token);
                         r.$store.commit("setUserKey", response.data.key);
@@ -121,7 +116,7 @@ export default {
                     }
                 })
                 .catch(function(error) {
-                    this.console.log(error);
+                    alert(error);
                 });
         },
         signUpButton() {
@@ -140,8 +135,6 @@ export default {
 <style scoped>
 .cont {
     padding-top: 65px;
-
-
     background-image: url("https://images.unsplash.com/photo-1473186578172-c141e6798cf4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1866&q=80");
     background-size: 100%;
     background-position: 100% 25%;
@@ -250,7 +243,7 @@ input {
     max-width: 100%;
 
     min-height: 480px;
-    z-index: 5;
+    z-index: 4;
     /*min-height: 480px;*/
 }
 
@@ -315,16 +308,9 @@ input {
 }
 
 .overlay {
-    /*background: #1e9600;*/
-    /* fallback for old browsers */
-    /*background: -webkit-linear-gradient(to right, #ff0000, #fff200, #1e9600);*/
-    /* Chrome 10-25, Safari 5.1-6 */
-    /*background: linear-gradient(to right, #ff0000, #fff200, #1e9600);*/
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;
-    /*color: #343009;*/
     position: relative;
     left: -100%;
     height: 100%;

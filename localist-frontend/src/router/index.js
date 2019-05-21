@@ -11,10 +11,12 @@ import SingleTour from '../components/SingleTour'
 import CreateTour from '../components/CreateTour'
 import Admin from '../components/Admin'
 import EditTour from '../components/EditTour'
-import EditGuide from '../components/EditGuide'
 import Profile from '../components/Profile'
+import Booking from '../components/Booking'
+import Payment from '../components/Payment'
 import test from '../components/test'
-import Signintest from '../components/Signintest'
+import EditTours from '../components/EditTours'
+import AboutGuide from '../components/AboutGuide'
 
 Vue.use(VueRouter)
 const router = new VueRouter({
@@ -24,6 +26,11 @@ const router = new VueRouter({
 			path      : '/',
 			name      : 'home',
 			component : Home
+		},
+		{
+			path      : '/aboutguide',
+			name      : 'aboutGuide',
+			component : AboutGuide
 		},
 		{
 			path      : '/signin',
@@ -57,19 +64,36 @@ const router = new VueRouter({
 			}
 		},
 		{
-			path      : '/tours/edit/:id',
-			name      : 'editTour',
-			component : EditTour
+			path      : '/tours/single/:id/booking',
+			name      : 'booking',
+			component : Booking,
+			meta      : {
+				requiresAuth : true
+			}
 		},
 		{
-			path      : '/guides/edit/:id',
-			name      : 'editGuide',
-			component : EditGuide
+			path      : '/tours/single/:id/booking/payment',
+			name      : 'payment',
+			component : Payment,
+			meta      : {
+				requiresAuth : true
+			}
+		},
+		{
+			path      : '/tours/edit/:id',
+			name      : 'editTour',
+			component : EditTour,
+			meta      : {
+				requiresAuth : true
+			}
 		},
 		{
 			path      : '/guides/single/:id',
 			name      : 'guideID',
-			component : SingleGuide
+			component : SingleGuide,
+			meta      : {
+				requiresAuth : true
+			}
 		},
 		{
 			path      : '/tours/single/:id',
@@ -79,7 +103,10 @@ const router = new VueRouter({
 		{
 			path      : 'admin',
 			name      : 'Admin',
-			component : Admin
+			component : Admin,
+			meta      : {
+				requiresAdmin : true
+			}
 		},
 		{
 			path      : '/test',
@@ -87,14 +114,17 @@ const router = new VueRouter({
 			component : test
 		},
 		{
-			path      : '/signintest',
-			name      : 'Signintest',
-			component : Signintest
-		},
-		{
 			path      : '/profile',
 			name      : 'profile',
-			component : Profile
+			component : Profile,
+			meta      : {
+				requiresAuth : true
+			}
+		},
+		{
+			path      : '/edit',
+			name      : 'edit',
+			component : EditTours
 		},
 		{
 			path     : '*',

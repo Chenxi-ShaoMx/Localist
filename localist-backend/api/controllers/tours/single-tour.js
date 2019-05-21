@@ -26,7 +26,9 @@ module.exports = {
 		// Initialize Firebase
 		var firebase = require('../../database/firebase.js')
 		var database = firebase.database()
-		var toursRefLong = database.ref('tours_short/' + this.req.params.key)
+		var toursRefShort = database.ref(
+			'tours_short/' + this.req.params.key
+		)
 
 		var addLongTour = this.req.params.long
 		var tour = {}
@@ -34,7 +36,7 @@ module.exports = {
 		try {
 			var long_key = ''
 
-			await toursRefLong.once('value').then(function (snapshot){
+			await toursRefShort.once('value').then(function (snapshot){
 				long_key = snapshot.val().long_id
 				tour = snapshot.val()
 			})

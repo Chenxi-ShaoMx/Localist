@@ -55,9 +55,13 @@ the account verification message.)`,
 		// Initialize Firebase
 		var firebase = require('../../database/firebase.js')
 		var admin = require('../../database/admin.js')
+		var database = firebase.database()
+		var usersRef = database.ref('users')
+		var token = ''
 		var userData = {
 			administration : false,
-			user           : ''
+			user           : '',
+			key            : ''
 		}
 
 		try {
@@ -68,21 +72,28 @@ the account verification message.)`,
 					inputs.password
 				)
 				.then(function (firebaseUser){
-					userData.user = firebaseUser
+					userData.user = firebaseUser.user
 					return firebase
 						.auth()
 						.currentUser.getIdToken(false)
 				})
 				.then(function (idToken){
-					userData.token = idToken
-					return admin
-						.auth()
-						.verifyIdToken(userData.token)
+					token = idToken
+					return admin.auth().verifyIdToken(idToken)
 				})
 				.then(function (claims){
 					if (claims.admin === true) {
 						userData.administration = true
 					}
+				})
+				.then(function (){
+					return usersRef
+						.orderByChild('uid')
+						.equalTo(userData.user.uid)
+						.once('value')
+				})
+				.then(function (user){
+					userData.key = Object.keys(user.toJSON())[0]
 				})
 		} catch (error) {
 			return this.res.status(400).send('Invalid email or password')

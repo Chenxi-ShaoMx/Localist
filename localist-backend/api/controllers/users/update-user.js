@@ -1,9 +1,9 @@
 module.exports = {
-	friendlyName        : 'update-guide',
+	friendlyName        : 'update-user',
 
-	description         : 'Update a guide',
+	description         : 'Update a user',
 
-	extendedDescription : `This updates a guide based on the id and the input fields`,
+	extendedDescription : `This updates a user based on the id and the input fields`,
 
 	inputs              : {
 		name          : {
@@ -13,24 +13,11 @@ module.exports = {
 			description : 'Your name.'
 		},
 
-		username      : {
-			required    : true,
-			type        : 'string',
-			example     : 'Jacob13Smith',
-			description : 'A username.'
-		},
-
-		image         : {
-			required    : false,
-			type        : 'string',
-			description : 'Users profile image'
-		},
-
 		date_of_birth : {
 			required    : true,
-			type        : 'number',
+			type        : 'string',
 			description :
-				'stored in yyyy/mm/dd for example March 15, 1998 becomes 19980315'
+				'stored in yyyy-mm-dd for example March 15, 1998 becomes 1998-03-15'
 		},
 
 		gender        : {
@@ -48,7 +35,7 @@ module.exports = {
 		},
 
 		coordinates   : {
-			required    : true,
+			required    : false,
 			type        : 'json',
 			description :
 				'the lattitude and the longitude of the users location'
@@ -57,7 +44,7 @@ module.exports = {
 
 	exits               : {
 		success : {
-			description : 'Updated guide successfully.'
+			description : 'Updated user successfully.'
 		},
 
 		invalid : {
@@ -82,23 +69,25 @@ module.exports = {
 					first : inputs.name.first,
 					last  : inputs.name.last
 				},
-				username      : inputs.username,
-				image         : inputs.image || '',
 				date_of_birth : inputs.date_of_birth,
 				gender        : inputs.gender,
 				location      : {
 					city    : inputs.location.city,
 					country : inputs.location.country
-				},
-				coordinates   : {
-					lattitude : inputs.coordinates.lattitude,
-					longitude : inputs.coordinates.longitude
 				}
 			})
+			if (coordinates) {
+				await usersRef.child(this.req.params.key).update({
+					coordinates : {
+						lattitude :
+							inputs.coordinates.lattitude,
+						longitude :
+							inputs.coordinates.longitude
+					}
+				})
+			}
 		} catch (error) {
-			return this.res
-				.status(404)
-				.send('User not found. Updated aborted')
+			return error
 		}
 
 		this.res.status(200).send('User updated successfully')

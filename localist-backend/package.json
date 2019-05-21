@@ -22,6 +22,7 @@
 		"sails-hook-organics": "^0.15.0",
 		"sails-hook-orm": "^2.1.1",
 		"sails-hook-sockets": "^1.5.5",
+		"save": "^2.3.3",
 		"skipper-gclouds": "^1.0.2"
 	},
 	"devDependencies": {
