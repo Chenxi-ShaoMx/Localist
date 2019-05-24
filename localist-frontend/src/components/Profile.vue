@@ -5,12 +5,12 @@
         </v-flex>
         <v-flex xs10 md10>
             <v-layout row wrap>
-                <v-flex>
-                    <h1>{{userName}}</h1>
+                <v-flex ml-5 xs10 align-self-end>
+                    <h1 class="display-1">{{userName}}</h1>
                     <img v-if="userImage" :src="userImage" class="preview" height="300px">
-                    <p>{{gender}}</p>
-                    <p>{{city}}, {{country}}</p>
-                    <p>{{description}}</p>
+                    <p class="title">{{gender}}</p>
+                    <p class="subheading">{{city}}, {{country}}</p>
+                    <p class="subheading">{{description}}</p>
 
                 </v-flex>
                 <v-flex>
